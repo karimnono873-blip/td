@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stabilité et Dynamique Interne</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']]
+            }
+        };
+    </script>
+
+    <style>
+        /* Palette de couleurs : Nuit, Violet, Cyan */
+        :root {
+            --bg-color: #0f172a;
+            --card-bg: #1e293b;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --accent-cyan: #06b6d4;
+            --accent-violet: #8b5cf6;
+            --border-color: #334155;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.7;
+            margin: 0;
+            padding: 40px 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .container {
+            max-width: 900px;
+            width: 100%;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            background: linear-gradient(to right, var(--accent-cyan), var(--accent-violet));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 30px 40px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(to bottom, var(--accent-cyan), var(--accent-violet));
+        }
+
+        h2 {
+            color: var(--text-main);
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 10px;
+            margin-top: 0;
+            font-weight: 600;
+        }
+
+        h3 {
+            color: var(--accent-cyan);
+            font-size: 1.1rem;
+            margin-top: 25px;
+        }
+
+        .math-block {
+            background-color: rgba(15, 23, 42, 0.5);
+            border-radius: 8px;
+            padding: 15px;
+            margin: 20px 0;
+            overflow-x: auto;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .highlight-box {
+            background-color: rgba(139, 92, 246, 0.1);
+            border-left: 4px solid var(--accent-violet);
+            padding: 15px 20px;
+            margin-top: 20px;
+            border-radius: 0 8px 8px 0;
+        }
+
+        ul {
+            color: var(--text-muted);
+        }
+
+        li {
+            margin-bottom: 10px;
+        }
+
+        strong {
+            color: var(--text-main);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header class="header">
+            <h1>Dynamique Interne et Stabilité</h1>
+            <div class="subtitle">Analyse mathématique et physique de la commande par linéarisation</div>
+        </header>
+
+        <main>
+            <section class="card">
+                <h2>1. Origine de la loi Exponentielle</h2>
+                <p>L'évolution de la dynamique interne inobservable (la dynamique des zéros) est régie par l'équation différentielle suivante :</p>
+                
+                <div class="math-block">
+                    $$ \frac{d\eta}{dt} = -(B+1)\eta $$
+                </div>
+
+                <h3>Étape A : Séparation des variables</h3>
+                <p>Pour résoudre cette équation, on isole les termes en $\eta$ d'un côté et le temps $t$ de l'autre :</p>
+                <div class="math-block">
+                    $$ \frac{1}{\eta} d\eta = -(B+1) dt $$
+                </div>
+
+                <h3>Étape B : Intégration</h3>
+                <p>On applique l'intégrale des deux côtés. La primitive de $1/x$ étant le logarithme népérien :</p>
+                <div class="math-block">
+                    $$ \ln|\eta(t)| = -(B+1)t + C $$
+                </div>
+
+                <h3>Étape C : Extraction par la fonction exponentielle</h3>
+                <p>En appliquant la fonction exponentielle ($e$) pour libérer $\eta(t)$, on obtient la solution temporelle finale, où $e^C$ correspond à l'état initial $\eta(0)$ :</p>
+                <div class="math-block">
+                    $$ \eta(t) = \eta(0) e^{-(B+1)t} $$
+                </div>
+            </section>
+
+            <section class="card">
+                <h2>2. Interprétation de la Stabilité</h2>
+                <p>La question de la stabilité en automatique se résume à l'analyse de la limite de cette fonction lorsque $t \to +\infty$. Tout dépend du signe de la puissance $-(B+1)$.</p>
+
+                <ul>
+                    <li><strong>Scénario Instable :</strong> Si la puissance est positive ($B < -1$), la fonction diverge. L'énergie interne s'accumule de manière incontrôlable, provoquant la destruction du système.</li>
+                    <li><strong>Scénario Stable :</strong> Si la puissance est négative ($B > -1$), la fonction converge asymptotiquement vers $0$. Le système dissipe son énergie interne en toute sécurité.</li>
+                </ul>
+
+                <div class="highlight-box">
+                    <strong>Application au système physique (B = 8) :</strong><br><br>
+                    En remplaçant le paramètre par la valeur de l'exercice, l'équation devient :
+                    <div class="math-block">
+                        $$ \eta(t) = \eta(0) e^{-9t} $$
+                    </div>
+                    Puisque $8 > -1$, le système est à <strong>minimum de phase</strong>. La constante de temps d'amortissement (liée au facteur -9) indique une dissipation extrêmement rapide. L'utilisation de la commande par linéarisation d'état est donc parfaitement valide et sécurisée.
+                </div>
+            </section>
+        </main>
+    </div>
+
+</body>
+</html>
